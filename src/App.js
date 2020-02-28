@@ -1,17 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, { useState, useEffect, useRef } from 'react';
-// import * as tf from '@tensorflow/tfjs';
 import * as mobilenet from '@tensorflow-models/mobilenet';
 import './App.css';
 import {
   Container,
-  Row,
-  Col,
   InputGroup,
   FormControl,
   Button,
   Image,
   Alert,
+  Col,
+  Row,
+  Spinner,
 } from 'react-bootstrap';
 
 const exampleImage =
@@ -19,6 +19,7 @@ const exampleImage =
 
 const App = () => {
   const imgRef = useRef();
+  const uploadImageRef = useRef();
   const [imgUrl, setImgUrl] = useState(exampleImage);
   const [imgCurrent, setImgCurrent] = useState(exampleImage);
   const [model, setModel] = useState();
@@ -31,8 +32,18 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    setPredictions('');
+  }, [imgCurrent]);
+
   const loadImage = () => {
     setImgCurrent(imgUrl);
+  };
+
+  const uploadImage = e => {
+    const url = URL.createObjectURL(e.target.files[0]);
+    setImgCurrent(url);
+    setImgUrl(url);
   };
 
   const classifyImage = () => {
@@ -46,40 +57,92 @@ const App = () => {
 
   return (
     <Container>
-      <Row>
-        <Col>
-          <h1 className="mt-4 mb-4">tfjs test</h1>
-          <InputGroup className="w-75 mb-3">
-            <FormControl
-              value={imgUrl}
-              onChange={e => setImgUrl(e.target.value)}
-              placeholder="Image url"
-              aria-label="Image url"
-            />
-            <InputGroup.Append>
-              <Button variant="outline-secondary" onClick={loadImage}>
-                Load image
-              </Button>
-            </InputGroup.Append>
-          </InputGroup>
-          <Image
-            crossOrigin="anonymous"
-            className="w-75"
-            ref={imgRef}
-            src={imgCurrent}
+      <header>
+        <h1 className="mt-4 mb-4">tfjs test</h1>
+      </header>
+
+      <main>
+        <InputGroup className="mb-3">
+          <FormControl
+            value={imgUrl}
+            onChange={e => setImgUrl(e.target.value)}
+            onClick={() => setImgUrl('')}
+            onBlur={() => setImgUrl(imgCurrent)}
+            placeholder="Image url"
+            aria-label="Image url"
           />
-          <div className="justify-content-end">
-            <Button variant="outline-secondary" onClick={classifyImage}>Classify this!</Button>
-          </div>
-          { predictions && (
-            <Alert variant='primary' className='w-75'>
-              <ol>
-                {predictions.map((d, i) => <li key={i}>{d}</li>)}
-              </ol>
-            </Alert>
-          )}
-        </Col>
-      </Row>
+          <InputGroup.Append>
+            <Button
+              variant="outline-secondary"
+              onClick={loadImage}
+              disabled={!model}
+            >
+              Load image url
+            </Button>
+          </InputGroup.Append>
+          <InputGroup.Append>
+            <input
+              ref={uploadImageRef}
+              type="file"
+              style={{ display: 'none' }}
+              accept="image/*"
+              onChange={uploadImage}
+            />
+            <Button
+              variant="outline-secondary"
+              onClick={() => uploadImageRef.current.click()}
+              disabled={!model}
+            >
+              Upload image
+            </Button>
+          </InputGroup.Append>
+        </InputGroup>
+        <Row className="justify-content-center">
+          <Col md={8}>
+            <Image
+              crossOrigin="anonymous"
+              className="w-100 mb-2"
+              ref={imgRef}
+              src={imgCurrent}
+            />
+            <div className="mb-2 ml-2">
+              <Button
+                variant="outline-secondary"
+                onClick={classifyImage}
+                disabled={!model}
+              >
+                {model ? (
+                  'Classify this!'
+                ) : (
+                  <>
+                    Loading model... <Spinner animation="border" size="sm" />
+                  </>
+                )}
+              </Button>
+            </div>
+            {predictions && (
+              <Alert variant="primary">
+                <ol>
+                  {predictions.map((d, i) => (
+                    <li key={i}>{d}</li>
+                  ))}
+                </ol>
+              </Alert>
+            )}
+          </Col>
+        </Row>
+        <div className="justify-content-end"></div>
+      </main>
+
+      <footer>
+        <Row>
+          <Col className="mt-4 text-right">
+            <a href="https://github.com/renato145/tfjs_test" target="_black">
+              Source code
+            </a>
+          </Col>
+        </Row>
+      </footer>
     </Container>
   );
 };
