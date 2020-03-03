@@ -11,13 +11,13 @@ const tensorToDataURL = tensor => (
       const ctx = canvas.getContext('2d');
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       const data = imageData.data;
+
       for (let i = 0; i < data.length; i++) {
         if ( [1,2].includes(i%4) ) data[i] = 0;
         if ( i%4 === 3 ) data[i] = 127;
       }
+
       ctx.putImageData(imageData, 0, 0);
-      console.log(data);
-      console.log(canvas);
       resolve(canvas.toDataURL());
     });
   })
