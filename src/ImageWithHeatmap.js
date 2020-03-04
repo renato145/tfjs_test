@@ -4,21 +4,23 @@ import { Image } from 'react-bootstrap';
 
 const ImageWithHeatmap = forwardRef(
   ({ imgURL, heatmapURL, className }, ref) => ( 
-    heatmapURL ? (
-      <ReactCompareImage
-        leftImage={imgURL}
-        leftImageCss={{ position: 'static' }}
-        rightImage={heatmapURL}
-        className={className}
-      />
-    ) : (
+    <>
       <Image
         crossOrigin="anonymous"
         className={className}
+        style={{display: heatmapURL ? 'none' : 'inherit'}}
         ref={ref}
         src={imgURL}
       />
-    )
+      { heatmapURL && (
+        <ReactCompareImage
+          leftImage={imgURL}
+          leftImageCss={{ position: 'static' }}
+          rightImage={heatmapURL}
+          className={className}
+        />
+      )}
+    </>
   )
 );
 

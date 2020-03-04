@@ -1,7 +1,7 @@
 import React from 'react';
 import { Alert } from 'react-bootstrap';
 
-const Predictions = ({ predictions }) => ( 
+const Predictions = ({ predictions, children }) => ( 
   <>
     { predictions && (
       <Alert variant="primary">
@@ -10,6 +10,7 @@ const Predictions = ({ predictions }) => (
             <li key={i}>{d}</li>
           ))}
         </ol>
+        {children}
       </Alert>
     )}
   </>
