@@ -1,0 +1,1 @@
+{"version":3,"sources":["SelectHeatmap.css"],"names":[],"mappings":"AAAA,iBACE,aAAc,CACd,eACF","file":"main.109ff686.chunk.css","sourcesContent":[".selection-label {\n  color: #50708d;\n  font-size: 0.9rem;\n}"]}
