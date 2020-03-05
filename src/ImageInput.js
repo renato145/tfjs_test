@@ -4,6 +4,7 @@ import { InputGroup, FormControl, Button } from 'react-bootstrap';
 const ImageInput = ({
   className,
   defaultImg,
+  imgURL,
   setImgURL,
   onChangeImage,
   disableButtons = false,
@@ -24,6 +25,7 @@ const ImageInput = ({
         value={inputURL}
         onChange={e => setInputUrl(e.target.value)}
         onClick={() => setInputUrl('')}
+        onBlur={() => setInputUrl(imgURL)}
         placeholder="Image url"
         aria-label="Image url"
       />

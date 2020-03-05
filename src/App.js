@@ -35,18 +35,16 @@ const App = () => {
   }, [model]);
 
   const updateHeatmap = useCallback(
-    () => {
+    layer => {
       if (!heatmapLayers) return;
-      // console.log(imgRef.current);
       const heatmap = getHeatmap({
         model,
         x: imgRef.current,
         layerName: heatmapLayers[layer],
       });
-      // console.log(heatmap.shape);
-      // tensorToDataURL(heatmap).then(setHeatmapURL);
+      tensorToDataURL(heatmap).then(setHeatmapURL);
     },
-    [heatmapLayers, model, layer]
+    [heatmapLayers, model]
   );
 
   return (
@@ -86,7 +84,7 @@ const App = () => {
                         img: imgRef.current,
                         setPredictions
                       });
-                      updateHeatmap();
+                      updateHeatmap(layer);
                     }}
                     disabled={!model}
                   >
@@ -106,8 +104,8 @@ const App = () => {
               <SelectHeatmap
                 heatmapLayers={heatmapLayers}
                 onChange={d => {
+                  updateHeatmap(d);
                   setLayer(d);
-                  updateHeatmap();
                 }}
               />
             </Predictions>

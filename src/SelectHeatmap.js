@@ -1,4 +1,6 @@
 import React, { useMemo } from 'react';
+import './SelectHeatmap.css';
+import { Col, Row } from 'react-bootstrap';
 
 const SelectHeatmap = ({ heatmapLayers, onChange }) => {
   const showLayers = useMemo(() => {
@@ -8,13 +10,18 @@ const SelectHeatmap = ({ heatmapLayers, onChange }) => {
 
   if (!heatmapLayers) return;
   return (
-    <select className='custom-select' onChange={e => onChange(+e.value)}>
-      {showLayers.map((d, i) => (
-        <option key={i} value={i}>
-          {d}
-        </option>
-      ))}
-    </select>
+    <Row className="justify-content-start">
+      <Col className='col-auto'>
+        <label className='selection-label mb-0 ml-2'>Select heatmap layer</label>
+        <select className='custom-select' onChange={e => onChange(+e.target.value)}>
+          {showLayers.map((d, i) => (
+            <option key={i} value={i}>
+              {d}
+            </option>
+          ))}
+        </select>
+      </Col>
+    </Row>
   );
 };
 
