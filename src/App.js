@@ -1,10 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {
-  useState,
-  useRef,
-  useMemo,
-  useCallback,
-} from 'react';
+import React, { useState, useRef, useMemo, useCallback } from 'react';
 import { Container, Row, Col, Button, Spinner } from 'react-bootstrap';
 import ImageInput from './ImageInput';
 import ImageWithHeatmap from './ImageWithHeatmap';
@@ -16,6 +11,7 @@ import useModel, {
 } from './useModel';
 import Predictions from './Predictions';
 import SelectHeatmap from './SelectHeatmap';
+import { Footer } from './Footer';
 import './App.css';
 
 const exampleImage =
@@ -35,7 +31,7 @@ const App = () => {
   }, [model]);
 
   const updateHeatmap = useCallback(
-    layer => {
+    (layer) => {
       if (!heatmapLayers) return;
       const heatmap = getHeatmap({
         model,
@@ -82,7 +78,7 @@ const App = () => {
                       classifyImage({
                         model,
                         img: imgRef.current,
-                        setPredictions
+                        setPredictions,
                       });
                       updateHeatmap(layer);
                     }}
@@ -103,7 +99,7 @@ const App = () => {
             <Predictions predictions={predictions}>
               <SelectHeatmap
                 heatmapLayers={heatmapLayers}
-                onChange={d => {
+                onChange={(d) => {
                   updateHeatmap(d);
                   setLayer(d);
                 }}
@@ -113,15 +109,7 @@ const App = () => {
         </Row>
       </main>
 
-      <footer>
-        <Row>
-          <Col className="mt-4 text-right">
-            <a href="https://github.com/renato145/tfjs_test" target="_black">
-              Source code
-            </a>
-          </Col>
-        </Row>
-      </footer>
+      <Footer url="tfjs_test" />
     </Container>
   );
 };
